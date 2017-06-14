@@ -208,55 +208,88 @@ class FrmEntriesHelper {
 	public static function prepare_display_value( $entry, $field, $atts ) {
 		$field_value = isset( $entry->metas[ $field->id ] ) ? $entry->metas[ $field->id ] : false;
 
-        if ( FrmAppHelper::pro_is_installed() ) {
+		if ( FrmAppHelper::pro_is_installed() ) {
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
-        }
+		}
 
-        if ( $field->form_id == $entry->form_id || empty($atts['embedded_field_id']) ) {
-            return self::display_value($field_value, $field, $atts);
-        }
+		if ( $field->form_id == $entry->form_id || empty( $atts['embedded_field_id'] ) ) {
+			return self::display_value( $field_value, $field, $atts );
+		}
 
-        // this is an embeded form
-        $val = '';
+		// this is an embeded form
+		$val = '';
 
-	    if ( strpos($atts['embedded_field_id'], 'form') === 0 ) {
-            //this is a repeating section
+		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
+			//this is a repeating section
 			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ) );
-        } else {
-            // get all values for this field
-	        $child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
+		} else {
+			// get all values for this field
+			$child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
 
-            if ( $child_values ) {
-	            $child_entries = FrmEntry::getAll( array( 'it.id' => (array) $child_values ) );
-	        }
-	    }
+			if ( $child_values ) {
+				$child_entries = FrmEntry::getAll( array( 'it.id' => (array) $child_values ) );
+			}
+		}
 
-	    $field_value = array();
+		//TODO Laura -- delete if okay to move child loop to separate function
 
-        if ( ! isset($child_entries) || ! $child_entries || ! FrmAppHelper::pro_is_installed() ) {
-            return $val;
-        }
+		//$field_value = array();
 
-        foreach ( $child_entries as $child_entry ) {
-            $atts['item_id'] = $child_entry->id;
-            $atts['post_id'] = $child_entry->post_id;
+		if ( ! isset( $child_entries ) || ! $child_entries || ! FrmAppHelper::pro_is_installed() ) {
+			return $val;
+		}
 
-            // get the value for this field -- check for post values as well
-            $entry_val = FrmProEntryMetaHelper::get_post_or_meta_value($child_entry, $field);
+		//TODO Laura -- delete if okay to move child loop to separate function
 
-            if ( $entry_val ) {
-                // foreach entry get display_value
-                $field_value[] = self::display_value($entry_val, $field, $atts);
-            }
+		/*        foreach ( $child_entries as $child_entry ) {
+					$atts['item_id'] = $child_entry->id;
+					$atts['post_id'] = $child_entry->post_id;
 
-            unset($child_entry);
-        }
+					// get the value for this field -- check for post values as well
+					$entry_val = FrmProEntryMetaHelper::get_post_or_meta_value($child_entry, $field);
 
-        $val = implode(', ', (array) $field_value );
+					if ( $entry_val ) {
+						// foreach entry get display_value
+						$field_value[] = self::display_value($entry_val, $field, $atts);
+					}
+
+					unset($child_entry);
+				}
+
+				$val = implode(', ', (array) $field_value );
+				$val = wp_kses_post( $val );
+
+				return $val;*/
+
+		return self::prepare_child_display_values( $child_entries, $field, $atts );
+	}
+
+	public static function prepare_child_display_values ($child_entries, $field, $atts ){
+
+		$field_value = array();
+
+		foreach ( $child_entries as $child_entry ) {
+			$atts['item_id'] = $child_entry->id;
+			$atts['post_id'] = $child_entry->post_id;
+
+			// get the value for this field -- check for post values as well
+			$entry_val = FrmProEntryMetaHelper::get_post_or_meta_value($child_entry, $field);
+
+			if ( $entry_val ) {
+				// foreach entry get display_value
+				$field_value[] = self::display_value($entry_val, $field, $atts);
+			}
+
+			unset($child_entry);
+		}
+
+		$val = implode(', ', (array) $field_value );
+
 		$val = wp_kses_post( $val );
 
-        return $val;
-    }
+		return $val;
+
+	}
 
     /**
      * Prepare the saved value for display
