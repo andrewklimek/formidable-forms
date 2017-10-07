@@ -89,7 +89,7 @@
 						<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
                         <span class="success_action_page_box success_action_box<?php echo ($values['success_action'] == 'page') ? '' : ' frm_hidden'; ?>">
                             <label><?php _e( 'Use Content from Page', 'formidable' ) ?></label>
-                            <?php FrmAppHelper::wp_pages_dropdown( 'options[success_page_id]', $values['success_page_id'] ) ?>
+                            <?php FrmAppHelper::wp_pages_selector( 'options[success_page_id]', $values['success_page_id'] ) ?>
                         </span>
                         <?php } ?>
                     </td>

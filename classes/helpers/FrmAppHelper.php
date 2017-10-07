@@ -556,16 +556,29 @@ class FrmAppHelper {
     }
 
     public static function wp_pages_selector( $field_name, $page_id, $truncate = false ) {
-        $too_many = 100;
+//        $too_many = 100;
+        $too_many = 1;
+        $post_count = wp_count_posts('page', 'readable');
+        $relavant_count = $post_count->publish + $post_count->private;
 
-        if (wp_count_posts('page', 'readable') > $too_many ) {
+        if ( $relavant_count > $too_many ) {
             self::wp_pages_autocomplete($field_name, $page_id, $truncate);
         } else {
             self::wp_pages_dropdown($field_name, $page_id, $truncate);
         }
     }
 
+    public static function ajax_page_search() {
+        FrmAppHelper::permission_check('frm_change_settings');
+        check_ajax_referer( 'frm_ajax', 'nonce' );
+    }
+
     public static function wp_pages_autocomplete( $field_name, $page_id, $truncate = false ) {
+        wp_enqueue_script('suggest', $in_footer = true);
+    ?>
+        <input type="text" name="FIXME" id="FIXME" value="" placeholder="FIXME">
+        <input type="hidden" name="<?php echo esc_attr($field_name); ?>" id="<?php echo esc_attr($field_name); ?>"
+    <?php
     }
 
     public static function wp_pages_dropdown( $field_name, $page_id, $truncate = false ) {

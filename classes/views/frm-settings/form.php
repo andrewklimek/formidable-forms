@@ -170,7 +170,7 @@
 		<?php } ?>
 
         <p><label class="frm_left_label"><?php _e( 'Preview Page', 'formidable' ); ?></label>
-        <?php FrmAppHelper::wp_pages_dropdown('frm-preview-page-id', $frm_settings->preview_page_id ) ?>
+        <?php FrmAppHelper::wp_pages_selector('frm-preview-page-id', $frm_settings->preview_page_id ) ?>
         </p>
 
 		<p>
