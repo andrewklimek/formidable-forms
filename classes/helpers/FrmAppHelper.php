@@ -555,6 +555,19 @@ class FrmAppHelper {
 		return get_posts( array( 'post_type' => 'page', 'post_status' => array( 'publish', 'private' ), 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ) );
     }
 
+    public static function wp_pages_selector( $field_name, $page_id, $truncate = false ) {
+        $too_many = 100;
+
+        if (wp_count_posts('page', 'readable') > $too_many ) {
+            self::wp_pages_autocomplete($field_name, $page_id, $truncate);
+        } else {
+            self::wp_pages_dropdown($field_name, $page_id, $truncate);
+        }
+    }
+
+    public static function wp_pages_autocomplete( $field_name, $page_id, $truncate = false ) {
+    }
+
     public static function wp_pages_dropdown( $field_name, $page_id, $truncate = false ) {
         $pages = self::get_pages();
 		$selected = self::get_post_param( $field_name, $page_id, 'absint' );
