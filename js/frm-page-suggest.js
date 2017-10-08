@@ -50,7 +50,7 @@
         term = getLast( request.term );
 
         $.get( window.ajaxurl, {
-          action: 'ajax-tag-search',
+          action: 'frm-page-search',
           q: term
         } ).always( function() {
           $element.removeClass( 'ui-autocomplete-loading' ); // UI fails to remove this sometimes?
