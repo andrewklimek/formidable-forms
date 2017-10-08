@@ -569,8 +569,20 @@ class FrmAppHelper {
     }
 
     public static function ajax_page_search() {
-        FrmAppHelper::permission_check('frm_change_settings');
-        check_ajax_referer( 'frm_ajax', 'nonce' );
+//        FrmAppHelper::permission_check('frm_change_settings');
+//        check_ajax_referer( 'frm_ajax', 'nonce' );
+        $get_posts = new WP_Query;
+        $r = array(
+            'numberposts' => -1,
+            'order' => 'ASC',
+            'orderby' => 'title',
+            'post_status' => array( 'publish', 'private' ),
+            'post_type' => 'page',
+            's' => $_GET['q'],
+        );
+        $posts = $get_posts->query($r);
+        echo json_encode($posts);
+        wp_die();
     }
 
     public static function wp_pages_autocomplete( $field_name, $page_id, $truncate = false ) {

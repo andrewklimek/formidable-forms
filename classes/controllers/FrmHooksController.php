@@ -144,6 +144,9 @@ class FrmHooksController {
 		add_action('wp_ajax_frm_addon_deactivate', 'FrmAddon::deactivate' );
 		add_action( 'wp_ajax_frm_fill_licenses', 'FrmAddonsController::get_licenses' );
 
+		// App Helper Controller
+        add_action( 'wp_ajax_frm_page_search', 'FrmAppHelper::ajax_page_search' );
+
         // Fields Controller
         add_action( 'wp_ajax_frm_load_field', 'FrmFieldsController::load_field' );
         add_action( 'wp_ajax_frm_insert_field', 'FrmFieldsController::create' );
