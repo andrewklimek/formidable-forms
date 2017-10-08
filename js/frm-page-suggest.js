@@ -21,7 +21,7 @@
    * Add UI Autocomplete to an input or textarea element with presets for use
    * with non-hierarchical taxonomies.
    *
-   * Example: `$( element ).wpTagsSuggest( options )`.
+   * Example: `$( element ).frmPageSuggest( options )`.
    *
    * The taxonomy can be passed in a `data-wp-taxonomy` attribute on the element or
    * can be in `options.taxonomy`.
@@ -31,7 +31,7 @@
    * @param {object} options Options that are passed to UI Autocomplete. Can be used to override the default settings.
    * @returns {object} jQuery instance.
    */
-  $.fn.wpTagsSuggest = function( options ) {
+  $.fn.frmPageSuggest = function( options ) {
     var cache;
     var last;
     var $element = $( this );
