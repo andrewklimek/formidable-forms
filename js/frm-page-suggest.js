@@ -80,7 +80,7 @@
         last = request.term;
       },
       focus: function( event, ui ) {
-        $element.attr( 'aria-activedescendant', 'wp-tags-autocomplete-' + ui.item.id );
+        $element.attr( 'aria-activedescendant', 'frm-page-autocomplete-' + ui.item.id );
 
         // Don't empty the input field when using the arrow keys to
         // highlight items. See api.jqueryui.com/autocomplete/#event-focus
@@ -136,7 +136,7 @@
     } )
       .autocomplete( options )
       .autocomplete( 'instance' )._renderItem = function( ul, item ) {
-      return $( '<li role="option" id="wp-tags-autocomplete-' + item.id + '">' )
+      return $( '<li role="option" id="frm-page-autocomplete-' + item.id + '">' )
         .text( item.name )
         .appendTo( ul );
     };
@@ -158,7 +158,7 @@
       } )
       // Returns a jQuery object containing the menu element.
       .autocomplete( 'widget' )
-      .addClass( 'wp-tags-autocomplete' )
+      .addClass( 'frm-page-autocomplete' )
       .attr( 'role', 'listbox' )
       .removeAttr( 'tabindex' ) // Remove the `tabindex=0` attribute added by jQuery UI.
 
