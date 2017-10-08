@@ -38,10 +38,6 @@
 
     options = options || {};
 
-    var taxonomy = options.taxonomy || $element.attr( 'data-wp-taxonomy' ) || 'post_tag';
-
-    delete( options.taxonomy );
-
     options = $.extend( {
       source: function( request, response ) {
         var term;
@@ -55,7 +51,6 @@
 
         $.get( window.ajaxurl, {
           action: 'ajax-tag-search',
-          tax: taxonomy,
           q: term
         } ).always( function() {
           $element.removeClass( 'ui-autocomplete-loading' ); // UI fails to remove this sometimes?
