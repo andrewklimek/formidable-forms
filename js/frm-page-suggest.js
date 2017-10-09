@@ -6,17 +6,6 @@
     return;
   }
 
-  var tempID = 0;
-  var separator = window.tagsSuggestL10n.tagDelimiter || ',';
-
-  function split( val ) {
-    return val.split( new RegExp( separator + '\\s*' ) );
-  }
-
-  function getLast( term ) {
-    return split( term ).pop();
-  }
-
   /**
    * Add UI Autocomplete to an input or textarea element with presets for use
    * with non-hierarchical taxonomies.
