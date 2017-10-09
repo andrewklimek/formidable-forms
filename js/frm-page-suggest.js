@@ -33,25 +33,16 @@
    */
   $.fn.frmPageSuggest = function( options ) {
     var cache;
-    var last;
     var $element = $( this );
 
     options = options || {};
 
     options = $.extend( {
       source: function( request, response ) {
-        var term;
-
-        if ( last === request.term ) {
-          response( cache );
-          return;
-        }
-
-        term = getLast( request.term );
 
         $.get( window.ajaxurl, {
           action: 'frm-page-search',
-          q: term
+          q: request.term
         } ).always( function() {
           $element.removeClass( 'ui-autocomplete-loading' ); // UI fails to remove this sometimes?
         } ).done( function( data ) {
@@ -68,8 +59,6 @@
             response( pages );
           }
         } );
-
-        last = request.term;
       },
       focus: function( event, ui ) {
         $element.attr( 'aria-activedescendant', 'frm-page-autocomplete-' + ui.item.id );
