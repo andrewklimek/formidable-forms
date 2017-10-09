@@ -32,9 +32,11 @@
         $.get( window.ajaxurl, {
           action: 'frm_page_search',
           q: request.term
-        } ).always( function() {
-          $element.removeClass( 'ui-autocomplete-loading' ); // UI fails to remove this sometimes?
-        } ).done( function( data ) {
+        } )
+          .always(removeSpinner)
+          .done(saveData);
+
+        function saveData(data) {
           var pages = [];
 
           if ( data ) {
@@ -47,7 +49,11 @@
           } else {
             response( pages );
           }
-        } );
+        }
+
+        function removeSpinner() {
+          $element.removeClass( 'ui-autocomplete-loading' ); // UI fails to remove this sometimes?
+        }
       },
       focus: function( event, ui ) {
         $element.attr( 'aria-activedescendant', 'frm-page-autocomplete-' + ui.item.id );
