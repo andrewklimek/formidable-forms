@@ -57,7 +57,7 @@
         event.preventDefault();
       },
       select: function( event, ui ) {
-        $element.val( ui.item.name );
+        $element.val( ui.item.post_title );
         // TODO set page ID hidden field
 
         if ( $.ui.keyCode.TAB === event.keyCode ) {
@@ -102,7 +102,7 @@
       .autocomplete( options )
       .autocomplete( 'instance' )._renderItem = function( ul, item ) {
       return $( '<li role="option" id="frm-page-autocomplete-' + item.id + '">' )
-        .text( item.name )
+        .text( item.post_title )
         .appendTo( ul );
     };
 
