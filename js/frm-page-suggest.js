@@ -30,7 +30,7 @@
       source: function( request, response ) {
 
         $.get( window.ajaxurl, {
-          action: 'frm-page-search',
+          action: 'frm_page_search',
           q: request.term
         } ).always( function() {
           $element.removeClass( 'ui-autocomplete-loading' ); // UI fails to remove this sometimes?
