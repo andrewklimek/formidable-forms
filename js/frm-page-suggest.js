@@ -124,7 +124,7 @@
       'aria-owns': $element.autocomplete( 'widget' ).attr( 'id' )
     } )
       .on( 'focus', function() {
-        var inputValue = split( $element.val() ).pop();
+        var inputValue = $element.val().trim();
 
         // Don't trigger a search if the field is empty.
         // Also, avoids screen readers announce `No search results`.
