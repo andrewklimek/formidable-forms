@@ -55,25 +55,17 @@
         } ).always( function() {
           $element.removeClass( 'ui-autocomplete-loading' ); // UI fails to remove this sometimes?
         } ).done( function( data ) {
-          var tagName;
-          var tags = [];
+          var pages = [];
 
           if ( data ) {
-            data = data.split( '\n' );
+            data = JSON.parse(data);
 
-            for ( tagName in data ) {
-              var id = ++tempID;
+            pages = data;
+            cache = pages;
 
-              tags.push({
-                id: id,
-                name: data[tagName]
-              });
-            }
-
-            cache = tags;
-            response( tags );
+            response( pages );
           } else {
-            response( tags );
+            response( pages );
           }
         } );
 
