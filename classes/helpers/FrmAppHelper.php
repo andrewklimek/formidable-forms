@@ -586,6 +586,7 @@ class FrmAppHelper {
     }
 
     public static function wp_pages_autocomplete( $field_name, $page_id, $truncate = false ) {
+        wp_enqueue_script('jquery-ui-autocomplete', $in_footer = true);
         wp_enqueue_script('suggest', $in_footer = true);
     ?>
         <input type="text" name="FIXME" id="FIXME" value="" placeholder="FIXME">
