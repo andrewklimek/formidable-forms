@@ -71,24 +71,21 @@ class FrmEntry {
 
             //add more checks here to make sure it's a duplicate
 			$metas = FrmEntryMeta::get_entry_meta_info( $entry_exist );
-            $field_metas = array();
+            $field_metas = array(); //$field_metas is the entry we are checking the new entry against
             foreach ( $metas as $meta ) {
 				$field_metas[ $meta->field_id ] = $meta->meta_value;
             }
 
-            // If prev entry is empty and current entry is not, they are not duplicates
-            $filtered_vals = array_filter( $values['item_meta'] );
+			// If prev entry is empty and current entry is not, they are not duplicates
+            $filtered_vals = array_filter( $values['item_meta'] ); //$filtered_vals are the values from the new entry
             if ( empty( $field_metas ) && ! empty( $filtered_vals ) ) {
                 return false;
             }
+            
+			if ( $field_metas !== $filtered_vals ) {
+				$is_duplicate = false;
+			}
 
-			$diff = array_diff_assoc( $field_metas, array_map( 'maybe_serialize', $values['item_meta'] ) );
-            foreach ( $diff as $field_id => $meta_value ) {
-				if ( ! empty( $meta_value ) ) {
-                    $is_duplicate = false;
-                    continue;
-                }
-            }
 
             if ( $is_duplicate ) {
 				break;
