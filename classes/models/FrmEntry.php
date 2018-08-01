@@ -37,10 +37,10 @@ class FrmEntry {
 		return $entry_id;
 	}
 
-    /**
-     * check for duplicate entries created in the last minute
-     * @return boolean
-     */
+	/**
+	 * check for duplicate entries created in the last minute
+	 * @return boolean
+	 */
 	public static function is_duplicate( $new_values, $values ) {
 		$duplicate_entry_time = apply_filters( 'frm_time_to_check_duplicates', 60, $new_values );
 
@@ -48,52 +48,52 @@ class FrmEntry {
 			return false;
 		}
 
-        $check_val = $new_values;
+		$check_val = $new_values;
 		$check_val['created_at >'] = date( 'Y-m-d H:i:s', ( strtotime( $new_values['created_at'] ) - absint( $duplicate_entry_time ) ) );
 
 		unset( $check_val['created_at'], $check_val['updated_at'] );
 		unset( $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
 
-        if ( $new_values['item_key'] == $new_values['name'] ) {
+		if ( $new_values['item_key'] == $new_values['name'] ) {
 			unset( $check_val['name'] );
-        }
+		}
 
-        global $wpdb;
+		global $wpdb;
 		$entry_exists = FrmDb::get_col( $wpdb->prefix . 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
 		if ( ! $entry_exists || empty( $entry_exists ) || ! isset( $values['item_meta'] ) ) {
-            return false;
-        }
+			return false;
+		}
 
-        $is_duplicate = false;
-        foreach ( $entry_exists as $entry_exist ) {
-            $is_duplicate = true;
+		$is_duplicate = false;
+		foreach ( $entry_exists as $entry_exist ) {
+			$is_duplicate = true;
 
-            //add more checks here to make sure it's a duplicate
+			//add more checks here to make sure it's a duplicate
 			$metas = FrmEntryMeta::get_entry_meta_info( $entry_exist );
-            $field_metas = array(); //$field_metas is the entry we are checking the new entry against
-            foreach ( $metas as $meta ) {
+			$field_metas = array(); //$field_metas is the entry we are checking the new entry against
+			foreach ( $metas as $meta ) {
 				$field_metas[ $meta->field_id ] = $meta->meta_value;
-            }
+			}
 
 			// If prev entry is empty and current entry is not, they are not duplicates
-            $filtered_vals = array_filter( $values['item_meta'] ); //$filtered_vals are the values from the new entry
-            if ( empty( $field_metas ) && ! empty( $filtered_vals ) ) {
-                return false;
-            }
-            
+			$filtered_vals = array_filter( $values['item_meta'] ); //$filtered_vals are the values from the new entry
+			if ( empty( $field_metas ) && ! empty( $filtered_vals ) ) {
+				return false;
+			}
+
 			if ( $field_metas !== $filtered_vals ) {
 				$is_duplicate = false;
 			}
 
 
-            if ( $is_duplicate ) {
+			if ( $is_duplicate ) {
 				break;
-            }
-        }
+			}
+		}
 
-        return $is_duplicate;
-    }
+		return $is_duplicate;
+	}
 
 	/**
 	 * Determine if an entry needs to be checked as a possible duplicate
