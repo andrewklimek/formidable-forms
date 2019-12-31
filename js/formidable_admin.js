@@ -367,8 +367,21 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		$info.dialog('open');
+		$info.dialog( 'open' );
 		continueButton.setAttribute( 'href', link.getAttribute( 'href' ) );
+		return false;
+	}
+
+	function infoModal( msg ) {
+		var $info = initModal( '#frm_info_modal', '400px' );
+
+		if ( $info === false ) {
+			return false;
+		}
+
+		jQuery( '.frm-info-msg' ).html( msg );
+
+		$info.dialog( 'open' );
 		return false;
 	}
 
@@ -471,6 +484,12 @@ function frmAdminBuildJS() {
 	}
 
 	function loadTooltips() {
+		var tooltipOpts = {
+			template: '<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',
+			placement: 'bottom',
+			container: 'body',
+		};
+
 		var wrapClass = jQuery( '.wrap, .frm_wrap' ),
 			confirmModal = document.getElementById( 'frm_confirm_modal' );
 
@@ -673,6 +692,7 @@ function frmAdminBuildJS() {
 		if ( auto !== 'auto' ) {
 			// Hide success message on tab change.
 			jQuery( '.frm_updated_message' ).hide();
+			jQuery('.frm_warning_style').hide();
 		}
 
 		if ( jQuery( link ).closest( '#frm_adv_info' ).length ) {
@@ -1187,10 +1207,10 @@ function frmAdminBuildJS() {
 			screenTop = pos.top;
 
 		if ( typeof animate === 'undefined' ) {
-			jQuery( container ).scrollTop(newPos);
+			jQuery( container ).scrollTop( newPos );
 		} else {
 			// TODO: smooth scroll
-			jQuery( container ).animate({scrollTop: newPos}, 500);
+			jQuery( container ).animate( {scrollTop: newPos}, 500 );
 		}
 	}
 
@@ -1200,7 +1220,49 @@ function frmAdminBuildJS() {
 		warningMessage += checkShortcodes( calculation, this );
 
 		if ( warningMessage !== '' ) {
-			alert( calculation + "\n\n" + warningMessage );
+			alert( calculation + '\n\n' + warningMessage );
+		}
+	}
+
+	/**
+	 * Checks the Detail Page slug to see if it's a reserved word and displays a message if it is.
+	 */
+	function checkDetailPageSlug() {
+		var slug = jQuery( '#param' ).val(),
+			msg;
+		slug = slug.trim().toLowerCase();
+		if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( slug ) ) {
+			msg = frm_admin_js.slug_is_reserved;
+			infoModal( msg );
+		}
+	}
+
+	/**
+	 * Checks View filter value for params named with reserved words and displays a message if any are found.
+	 */
+	function checkFilterParamNames() {
+		var regEx = /\[\s*get\s*param\s*=\s*['"]?([a-zA-Z-_]+)['"]?/ig,
+			filterValue = jQuery( this ).val(),
+			match = regEx.exec( filterValue ),
+			unsafeParams = '';
+
+		while ( match != null ) {
+			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[ 1 ] ) ) {
+				if ( unsafeParams !== '' ) {
+					unsafeParams += ', ' + match[ 1 ];
+				} else {
+					unsafeParams = match[ 1 ];
+				}
+			}
+			match = regEx.exec( filterValue );
+		}
+
+		if ( unsafeParams !== '' ) {
+			msg = frm_admin_js.param_is_reserved;
+			msg += '\n\n' + unsafeParams + '\n\n';
+			msg += frm_admin_js.reserved_danger;
+
+			infoModal( msg );
 		}
 	}
 
@@ -1214,11 +1276,11 @@ function frmAdminBuildJS() {
 		var stack = [],
 			formula_array = formula.split( '' ),
 			length = formula_array.length,
-			opening = ["{", "[", "("],
+			opening = [ '{', '[', '(' ],
 			closing = {
-				"}": "{",
-				")": "(",
-				"]": "[",
+				'}': '{',
+				')': '(',
+				']': '[',
 			},
 			unmatchedClosing = [],
 			msg = '',
@@ -3155,11 +3217,18 @@ function frmAdminBuildJS() {
 	function checkActiveAction( type ) {
 		var limit = parseInt( jQuery( '.frm_' + type + '_action' ).data( 'limit' ) );
 		var len = jQuery( '.frm_single_' + type + '_settings' ).length;
+		var limitClass;
 		if ( len >= limit ) {
-			jQuery( '.frm_' + type + '_action' ).removeClass( 'frm_active_action' ).addClass( 'frm_inactive_action' );
+			limitClass = 'frm_inactive_action';
+			limitClass += ( limit > 0 ) ? ' frm_already_used' : '';
+			jQuery( '.frm_' + type + '_action' ).removeClass( 'frm_active_action' ).addClass( limitClass );
 		} else {
-			jQuery( '.frm_' + type + '_action' ).removeClass( 'frm_inactive_action' ).addClass( 'frm_active_action' );
+			jQuery( '.frm_' + type + '_action' ).removeClass( 'frm_inactive_action frm_already_used' ).addClass( 'frm_active_action' );
 		}
+	}
+
+	function onlyOneActionMessage() {
+		infoModal( frm_admin_js.only_one_action );
 	}
 
 	function addFormLogicRow() {
