@@ -1089,7 +1089,7 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown ) {
-		alert( errorThrown + '. Please try again.' );
+		infoModal( errorThrown + '. Please try again.' );
 		if ( 'summary' === fieldType ) {
 			addBtn.removeClass( 'disabled' );
 			fieldButton.draggable( 'enable' );
@@ -1214,7 +1214,7 @@ function frmAdminBuildJS() {
 		warningMessage += checkShortcodes( calculation, this );
 
 		if ( warningMessage !== '' ) {
-			alert( calculation + '\n\n' + warningMessage );
+			infoModal( calculation + '\n\n' + warningMessage );
 		}
 	}
 
@@ -2287,7 +2287,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var val = this.value;
 		if ( val !== '' && ( val < 2 || val > 200 ) ) {
-			alert( frm_admin_js.repeat_limit_min );
+			infoModal( frm_admin_js.repeat_limit_min );
 			this.value = '';
 		}
 	}
@@ -2296,7 +2296,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var val = this.value;
 		if ( val !== '' && ( val < 1 || val > 200 ) ) {
-			alert( frm_admin_js.checkbox_limit );
+			infoModal( frm_admin_js.checkbox_limit );
 			this.value = '';
 		}
 	}
@@ -2550,7 +2550,7 @@ function frmAdminBuildJS() {
 				var c = false;
 				if ( !c && jQuery( v ).attr( 'id' ) != id && jQuery( v ).html() == text ) {
 					c = true;
-					alert( 'Saved values cannot be identical.' );
+					infoModal( 'Saved values cannot be identical.' );
 				}
 			} );
 		}
@@ -3362,7 +3362,7 @@ function frmAdminBuildJS() {
 			if ( jQuery( this ).val() === v && this.name !== $t.name ) {
 				this.style.borderColor = 'red';
 				jQuery( $t ).val( '' );
-				alert( 'Oops. You have already used that field.' );
+				infoModal( 'Oops. You have already used that field.' );
 				return false;
 			}
 		} );
@@ -4173,7 +4173,7 @@ function frmAdminBuildJS() {
 		// Check if there is enough space for text
 		var textSpace = height - size - paddingTop - paddingBottom - 3;
 		if ( textSpace < 0 ) {
-			alert( frm_admin_js.css_invalid_size );
+			infoModal( frm_admin_js.css_invalid_size );
 		}
 	}
 
