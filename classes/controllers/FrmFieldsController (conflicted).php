@@ -198,28 +198,7 @@ class FrmFieldsController {
 
 		$options = FrmField::get_option( $field, 'options' );
 		$first_option = reset( $options );
-		$field['image_options'] = 1;
 
-
-		// TODO Laura -- move to Pro and check if this function is callable
-
-		if ( ! FrmProFieldsHelper::is_image_option( $first_option ) ){
-			return $field;
-		}
-
-		// TODO Laura -- remove this when switch is complete
-//		if ( strpos( $first_option, 'frm_image_option' ) === false ) {
-//			return '';
-//		}
-
-		$size       = FrmFieldsHelper::get_image_size( $first_option );
-		$field['image_size'] = $size ? $size : 'medium';
-		$field['align'] = 'inline';
-
-		return $field;
-
-		// TODO Laura -- remove this
-		//return ( ' frm_image_options frm_image_size_' . $image_size . ' ' );
 	}
 
 	/**
