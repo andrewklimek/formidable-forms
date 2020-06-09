@@ -2295,12 +2295,12 @@ class FrmAppHelper {
 		return __( 'Please delete. Does not work with images.', 'formidable' );
 	}
 
-	public static function get_default_image_option_size(){
-		if (is_callable( 'FrmProFieldsController::get_default_image_option_size')){
+	public static function get_default_image_option_size() {
+		if ( is_callable( 'FrmProFieldsController::get_default_image_option_size' ) ) {
 			return FrmProFieldsController::get_default_image_option_size();
 		}
 
-		return 'medium';
+		return 'small';
 	}
 
 	/**
