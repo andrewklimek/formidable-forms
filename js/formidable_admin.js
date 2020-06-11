@@ -1977,7 +1977,6 @@ function frmAdminBuildJS() {
 		}
 
 		setInputPlaceholder( fieldId, hasImageOptions );
-		setOtherValue( fieldId, hasImageOptions );
 	}
 
 	function removeImageSizeClassesFromField( $field ) {
@@ -1991,13 +1990,6 @@ function frmAdminBuildJS() {
 	function setInputPlaceholder( fieldId, hasImageOptions ) {
 		var placeholder = hasImageOptions ? frm_admin_js.image_label_placeholder : '';
 		jQuery( '.field_' + fieldId + '_option' ).attr( 'placeholder', placeholder );
-	}
-
-	function setOtherValue( fieldId, hasImageOptions ) {
-		if ( ! hasImageOptions ){
-			return;
-		}
-		jQuery( 'input[name^="field_options[options_' + fieldId + '][other"]' ).val( frm_admin_js.other_images_warning );
 	}
 
 	function setImageSize( event ) {
